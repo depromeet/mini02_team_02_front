@@ -5,18 +5,18 @@
 			<p>분실 하신 물건의 습득 상황 검색을 빠르게 도와드립니다:)</p>
 		</div>
 
-		<table id="total">
-      <tr>
-        <td class="col1" v-if="!categoryDown">분실물 종류</td>
-        <td class="col1-1" v-if="categoryDown"><p>분실물 종류</p></td>
-        <td class="col2">
-          <div v-if="!categoryDown" class="select" v-bind:class="{ 'selected': categorySelected }" @click="categoryDown=true">
+		<div id="total">
+      <div class="field">
+        <div class="col1" v-if="!categoryDown">분실물 종류</div>
+        <div class="col1-1" v-if="categoryDown"><p>분실물 종류</p></div>
+        <div class="col2">
+          <div v-if="!categoryDown" class="select" v-bind:class="{ 'selected': categorySelected }" @click="clickCategoryDown(true)">
             <span>{{ categorySelected ? categoryName: '잃어버린 물건의 카테고리를 선택해주세요.' }}</span>
             <img src="../assets/bt_down.png"/>
           </div>
           <div class="category" v-if="categoryDown">
             <span>분실물 종류를 선택해주세요.</span>
-            <img id="up" src="../assets/bt_up.png" @click="categoryDown=false"/>
+            <img id="up" src="../assets/bt_up.png" @click="clickCategoryDown(false)"/>
 
             <div id="options">
               <div class="optionItem" v-for="category in categorys">
@@ -28,36 +28,36 @@
               </div>
             </div>
           </div>
-        </td>
-      </tr>
-      <tr>
-        <td class="col1">분실물 명</td>
-        <td class="col2">
-          <input id="lost-name" type="text" placeholder="      잃어버린 물건의 이름을 입력해주세요." />
-        </td>
-      </tr>
-      <tr>
-        <td class="col1">기간</td>
-        <td class="col2">
-          <div>
-            <input class="lost-date" type="text" placeholder="      2018.05.12" />
+        </div>
+      </div>
+      <div class="field">
+        <div class="col1">분실물 명</div>
+        <div class="col2">
+          <input id="lost-name" type="text" placeholder="잃어버린 물건의 이름을 입력해주세요." />
+        </div>
+      </div>
+      <div class="field">
+        <div class="col1">기간</div>
+        <div class="col2">
+          <div class="date-range">
+            <input class="lost-date" type="text" placeholder="2018.05.12" />
             <img class="cal-icon" src="../assets/bt_calendar.png" align="middle" />
             <span id="char">~</span>
-            <input class="lost-date" type="text" placeholder="      2018.05.12">
+            <input class="lost-date" type="text" placeholder="2018.05.12">
             <img class="cal-icon" src="../assets/bt_calendar.png" align="middle"/>
           </div>
-        </td>
-      </tr>
-      <tr>
-        <td class="col1" v-if="!placeDownDown">분실 장소</td>
-        <td class="col1-1" v-if="placeDownDown"><p>분실 장소</p></td>
-        <td class="col2">
+        </div>
+      </div>
+      <div class="field">
+        <div class="col1" v-if="!placeDownDown">분실 장소</div>
+        <div class="col1-1" v-if="placeDownDown"><p>분실 장소</p></div>
+        <div class="col2">
           <div class="select" v-bind:class="{ 'selected': placeSelected }" v-if="!placeDownDown" @click="clickPlaceDown(true)">
             <span>{{ placeSelected ? placeName: '분실하신 장소를 선택해주세요.' }}</span>
             <img src="../assets/bt_down.png" />
           </div>
           <div class="place-options" v-if="placeDownDown">
-            <span>분실 장소를 선택해주세요.</span>
+            <span>분실하신 장소를 선택해주세요.</span>
             <img id="up" src="../assets/bt_up.png" @click="clickPlaceDown(false)"/>
 
             <ul id="place-list">
@@ -66,10 +66,10 @@
               </li>
             </ul>
           </div>
-        </td>
-      </tr>
+        </div>
+      </div>
 
-		</table>
+		</div>
 
     <button id="search" @click="searchItems()">
       <div id="search-wrapper">
@@ -167,16 +167,19 @@ export default {
       var images = require.context('../assets/', false, /\.png$/)
       return images('./' + img + ".png")
     },
-    toggleCategory: function() {
+    clickCategoryDown: function(click) {
+      this.categoryDown = click;
+      this.placeDownDown = false;
     },
     clickCategory: function(name) {
       this.categoryName = name;
       this.categorySelected = true;
       this.categoryDown = false;
+      this.placeDownDown = false;
     },
     clickPlaceDown: function(click) {
       this.placeDownDown = click;
-      this.placeSelected = !click;
+      this.categoryDown = false;
     },
     clickPlace: function(name, id) {
       this.placeName = name;
@@ -255,7 +258,7 @@ export default {
 #message {
   font-size: 34.4px;
   color: #333333;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
 }
 #message p {
   margin: 13px;
@@ -265,13 +268,26 @@ export default {
   text-align: left;
   margin: 0 auto;
   font-size: 24.5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-#total tr>td {
+#total .field {
+  width: 776px;
   padding-bottom: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 .col1 {
   width: 150px;
   height: 56px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 .col1-1 {
   width: 150px;
@@ -284,6 +300,8 @@ export default {
 }
 .col2 {
   height: 56px;
+  position: relative;
+  display: flex;
 }
 #char {
   margin-left: 15px;
@@ -317,6 +335,7 @@ export default {
   margin-right: 21px;
   margin-top: 21px;
   display: inline;
+  cursor: pointer;
   /*margin-bottom: 21px;*/
   /*padding-bottom: 100px;*/
 }
@@ -327,13 +346,16 @@ export default {
   background-color: #ffffff;
   border: solid 1px #dcdcdc;
   text-align: center;
+  position: relative;
+}
+.category #up {
+  cursor: pointer;
 }
 .place-options {
   width: 631px;
   border-radius: 5px;
   background-color: #ffffff;
   border: solid 1px #dcdcdc;
-  text-align: center;
 }
 /*.option {
   float: left;
@@ -369,10 +391,6 @@ input::placeholder {
 .cal-icon {
   height: 44px;
   width: 51px;
-  margin-left: 10px;
-  /*margin-top: 6px;*/
-  margin-bottom: 10px;
-  display: inline-block;
 }
 #search {
   width: 280px;
@@ -383,6 +401,8 @@ input::placeholder {
   color: #ffffff;
   border: none;
   margin-top: 40px;
+  cursor: pointer;
+  outline: 0;
 }
 #search-wrapper {
   /*margin-top: 18px;*/
@@ -404,6 +424,9 @@ input::placeholder {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  z-index: 100;
+  background: #fff;
 }
 #options .optionItem {
   height: 120px;
@@ -428,11 +451,28 @@ input::placeholder {
   color: #333333;
   padding: 0;
   margin-bottom: 0;
+  background: #fff;
+  border-left: solid 1px #dcdcdc;
+  border-right: solid 1px #dcdcdc;
+}
+.place-options span {
+  text-align: left;
 }
 .place-option {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 50px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 30px;
   border-top: solid 1px #dcdcdc;
+  cursor: pointer;
+}
+.place-option:hover {
+  background: #dcdcdc;
+}
+.date-range {
+  width: 631px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
