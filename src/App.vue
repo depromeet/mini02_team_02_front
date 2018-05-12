@@ -26,6 +26,7 @@ body, html {
 }
 body {
   background: #f4f4f4;
+  overflow: scroll !important;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
