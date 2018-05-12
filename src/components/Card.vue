@@ -1,6 +1,6 @@
 <template>
   
-  <div id="card">
+  <div class="card">
     <!-- <embed src="../assets/logo_header.svg" /> -->
     <!-- <link rel="stylesheet" href="//cdn.rawgit.com/hiun/NanumSquare/master/nanumsquare.css" type='text/css'> -->
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nanum Gothic Coding"> -->
@@ -66,15 +66,18 @@ export default {
 <style scoped>
 @import url(https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css);
 
-#card {
+.card {
   width: 280px;
   height: 486px;
   background-color: white;
   border: 1px solid #000000;
   text-align: left;
   font-family: 'NanumSquare';
-  margin-right: 20px;
   margin-bottom: 20px;
+}
+
+.card:not(:nth-child(4n)) {
+  margin-right: 20px;
 }
 
 #img-wrapper {

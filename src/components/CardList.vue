@@ -29,7 +29,7 @@ export default {
   align-items: center;
 }
 .cardList {
-  width: 1300px;
+  width: 1188px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -48,5 +48,6 @@ p {
   letter-spacing: normal;
   text-align: center;
   color: #333333;
+  margin-bottom: 32px;
 }
 </style>

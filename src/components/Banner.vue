@@ -7,20 +7,38 @@
     버스, 지하철,  택시 등 대중교통 이용 중 잃어버린 물건을 찾을 수 있도록 도와드립니다.
     물건을 잃어버리거나 분실물을 습득하신 경우 제보해 주세요.
   </p>
-  <Question class="question" />
+  <div class="question" :class="{ active: active }" v-show="!active" @mouseover="questionHover">
+    <Question />
+  </div>
+  <div class="question questionHover" :class="{ active: !active }" v-show="active" @mouseleave="questionHover">
+    <QuestionHover />
+  </div>
   <Main class="main" />
 </div>
 </template>
 
 <script>
 import Question from '@/assets/img_question.svg';
+import QuestionHover from '@/assets/img_question_hover.svg';
 import Main from '@/assets/img_main.svg';
 
 export default {
   components: {
     Question,
+    QuestionHover,
     Main,
   },
+  data() {
+    return {
+      active: false,
+    };
+  },
+  methods: {
+    questionHover: function() {
+      console.log('a')
+      this.active = !this.active;   
+    }
+  }
 };
 </script>
 
@@ -28,7 +46,7 @@ export default {
 .banner {
   height: 781px;
   background: #cae4d7;
-  margin-top: -100px;
+  margin-top: -120px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,5 +82,10 @@ p {
   z-index: 100;
   position: absolute;
   bottom: 50px;
+  cursor: pointer;
+}
+.question.active {
+  transform: rotateY(180deg);
+  transition: 0.6s;
 }
 </style>
