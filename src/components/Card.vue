@@ -14,15 +14,15 @@
 
 
 
-    <p id="name">닥스 벨트3종류</p>
-    <span id="code">50355809</span>
+    <p id="name">{{ data.GET_NAME }}</p>
+    <span id="code">{{ data.ID }}</span>
     <table>
       <tr>
         <td class="col1">
           <span class="text-size">습득장소</span>
         </td>
         <td class="col2">
-          <span class="text-size">버스</span>
+          <span class="text-size">{{ data.GET_POSITION }}</span>
         </td>
       </tr>
       <tr>
@@ -30,7 +30,7 @@
           <span class="text-size">보관장소</span>
         </td>
         <td class="col2">
-          <span class="text-size">유스퀘어 유실물센터</span>
+          <span class="text-size">{{ data.TAKE_PLACE }}</span>
         </td>
       </tr>
       <tr>
@@ -38,7 +38,7 @@
           <span class="text-size">습득일</span>
         </td>
         <td class="col2">
-          <span class="text-size">2018.05.06</span>
+          <span class="text-size">{{ data.GET_DATE }}</span>
         </td>
       </tr>
     </table>
@@ -52,6 +52,7 @@
 <script>
 export default {
   name: 'Card',
+  props: ['data'],
   data () {
     return {
 
@@ -72,6 +73,8 @@ export default {
   border: 1px solid #000000;
   text-align: left;
   font-family: 'NanumSquare';
+  margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 #img-wrapper {
