@@ -7,7 +7,8 @@
       <p>2018.04.28 - 2018.05.12</p>
     </div>
     <div>
-      <Logo class="logo"/>
+      <img class="logo" src="../assets/logo_footer.png" />
+      <img class="logo" src="../assets/logo_depromet.png" />
     </div>
     <div>
       <p>Design. YoungEun. DaWon.</p>
@@ -17,16 +18,6 @@
   </div>
 </footer>
 </template>
-
-<script>
-import Logo from '@/assets/logo_footer.svg';
-
-export default {
-  components: {
-    Logo,
-  },
-};
-</script>
 
 <style scoped>
 footer {
@@ -47,6 +38,9 @@ footer {
 .logo {
   fill: #979797;
   color: #979797;
+}
+.logo:not(:first-child) {
+  margin-left: 20px;
 }
 p {
   font-size: 10px;

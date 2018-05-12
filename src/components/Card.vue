@@ -70,7 +70,6 @@ export default {
   width: 280px;
   height: 486px;
   background-color: white;
-  border: 1px solid #000000;
   text-align: left;
   font-family: 'NanumSquare';
   margin-bottom: 20px;

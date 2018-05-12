@@ -33,17 +33,27 @@
       <div class="field">
         <div class="col1">분실물 명</div>
         <div class="col2">
-          <input id="lost-name" type="text" placeholder="잃어버린 물건의 이름을 입력해주세요." />
+          <input v-model="lostName" id="lost-name" type="text" placeholder="잃어버린 물건의 이름을 입력해주세요." />
         </div>
       </div>
       <div class="field">
         <div class="col1">기간</div>
         <div class="col2">
           <div class="date-range">
-            <input class="lost-date" type="text" placeholder="2018.05.12" />
+            <input class="lost-date" :value="lowerDate" readonly type="text" placeholder="2018.05.12" @click="lowerDatePickerVisible" />
+            <DatePicker 
+              v-show="lowerDateVisible" 
+              @close="lowerDateVisible = false"
+              v-model="lowerDate"
+            />
             <img class="cal-icon" src="../assets/bt_calendar.png" align="middle" />
             <span id="char">~</span>
-            <input class="lost-date" type="text" placeholder="2018.05.12">
+            <input class="lost-date" :value="upperDate" readonly type="text" placeholder="2018.05.12" @click="upperDatePickerVisible" />
+            <DatePicker 
+              v-show="upperDateVisible" 
+              @close="upperDateVisible = false"
+              v-model="upperDate"
+            />
             <img class="cal-icon" src="../assets/bt_calendar.png" align="middle"/>
           </div>
         </div>
@@ -82,84 +92,95 @@
 
 <script>
 import axios from 'axios';
+import DatePicker from '@/components/DatePicker';
 
 export default {
   name: 'Search',
+  components: {
+    DatePicker,
+  },
   data () {
     return {
-      categorys: [{
-        'name': '쇼핑백',
-        'en': 'Shopping Bag',
-        'img': 'cate_shoppingbag', 
-      }, {
-        'name': '지갑',
-        'en': 'Wallet',
-        'img': 'cate_wallet',
-      }, {
-        'name': '서류통부',
-        'en': 'Document',
-        'img': 'cate_documents',
-      }, {
-        'name': '책',
-        'en': 'Book',
-        'img': 'cate_book',
-      }, {
-        'name': '가방',
-        'en': 'Bag',
-        'img': 'cate_bag',
-      }, {
-        'name': '핸드폰',
-        'en': 'Cell Phone',
-        'img': 'cate_cellphone',
-      }, {
-        'name': '파일',
-        'en': 'File',
-        'img': 'cate_file',
-      }, {
-        'name': '배낭',
-        'en': 'Backpack',
-        'img': 'cate_backpack',
-      }, {
-        'name': '옷',
-        'en': 'Clothes',
-        'img': 'cate_clothes',
-      }, {
-        'name': '기타',
-        'en': 'etc.',
-        'img': 'cate_etc',
-      }],
+      lostName: null,
+      categorys: [
+        {
+          'name': '쇼핑백',
+          'en': 'Shopping Bag',
+          'img': 'cate_shoppingbag', 
+        }, {
+          'name': '지갑',
+          'en': 'Wallet',
+          'img': 'cate_wallet',
+        }, {
+          'name': '서류통부',
+          'en': 'Document',
+          'img': 'cate_documents',
+        }, {
+          'name': '책',
+          'en': 'Book',
+          'img': 'cate_book',
+        }, {
+          'name': '가방',
+          'en': 'Bag',
+          'img': 'cate_bag',
+        }, {
+          'name': '핸드폰',
+          'en': 'Cell Phone',
+          'img': 'cate_cellphone',
+        }, {
+          'name': '파일',
+          'en': 'File',
+          'img': 'cate_file',
+        }, {
+          'name': '배낭',
+          'en': 'Backpack',
+          'img': 'cate_backpack',
+        }, {
+          'name': '옷',
+          'en': 'Clothes',
+          'img': 'cate_clothes',
+        }, {
+          'name': '기타',
+          'en': 'etc.',
+          'img': 'cate_etc',
+        }
+      ],
       categoryName: null,
       categorySelected: false,
       categoryDown: false,
-      places: [{
-        'name': '버스',
-        'id': 'b1',
-      }, {
-        'name': '마을버스',
-        'id': 'b2',
-      }, {
-        'name': '지하철 1~4호선',
-        'id': 's1',
-      }, {
-        'name': '지하철 5~8호선',
-        'id': 's2',
-      }, {
-        'name': '지하철 9호선',
-        'id': 's4',
-      }, {
-        'name': '코레일',
-        'id': 's3',
-      }, {
-        'name': '법인택시',
-        'id': 't1',
-      }, {
-        'name': '개인택시',
-        'id': 't2',
-      }],
+      places: [
+        {
+          'name': '버스',
+          'id': 'b1',
+        }, {
+          'name': '마을버스',
+          'id': 'b2',
+        }, {
+          'name': '지하철 1~4호선',
+          'id': 's1',
+        }, {
+          'name': '지하철 5~8호선',
+          'id': 's2',
+        }, {
+          'name': '지하철 9호선',
+          'id': 's4',
+        }, {
+          'name': '코레일',
+          'id': 's3',
+        }, {
+          'name': '법인택시',
+          'id': 't1',
+        }, {
+          'name': '개인택시',
+          'id': 't2',
+        }
+      ],
       placeName: null,
       placeId: null,
       placeSelected: false,
       placeDownDown: false,
+      lowerDateVisible: false,
+      upperDateVisible: false,
     }
   },
   methods: {
@@ -188,61 +209,33 @@ export default {
       this.placeDownDown = false;
     },
     searchItems: function() {
-      var self = this;
+      this.$emit('getItems', []);
+      this.$emit('pending', true);
       axios.get('http://13.209.42.155:8080/Greeting/losts', {
         params: {
+          ...(this.lostName ? {name: this.lostName} : {}),
           category: this.categoryName,
           place: this.placeId,
         },
         headers: {
-          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
         },
       }).then(res => {
-        // this.items = res;
-        // console.log(typeof(res))
-        // self.$emit('getItems', ['test'])
+        this.$emit('getItems', res.data);
+        this.$emit('pending', false);
       }).catch(err => {
-        var data = [{
-          GET_DATE: "2009-09-28",
-          GET_NAME: "쇼핑백(황토색바지) 010)6799-****",
-          GET_POSITION: "신명운수",
-          ID: 15955111,
-          IMAGE_URL: "",
-          TAKE_PLACE: "회사내 분실센터",
-        }, {
-          GET_DATE: "2009-09-28",
-          GET_NAME: "쇼핑백(황토색바지) 010)6799-****",
-          GET_POSITION: "신명운수",
-          ID: 15955111,
-          IMAGE_URL: "",
-          TAKE_PLACE: "회사내 분실센터",
-        }, {
-          GET_DATE: "2009-09-28",
-          GET_NAME: "쇼핑백(황토색바지) 010)6799-****",
-          GET_POSITION: "신명운수",
-          ID: 15955111,
-          IMAGE_URL: "",
-          TAKE_PLACE: "회사내 분실센터",
-        }, {
-          GET_DATE: "2009-09-28",
-          GET_NAME: "쇼핑백(황토색바지) 010)6799-****",
-          GET_POSITION: "신명운수",
-          ID: 15955111,
-          IMAGE_URL: "",
-          TAKE_PLACE: "회사내 분실센터",
-        }, {
-          GET_DATE: "2009-09-28",
-          GET_NAME: "쇼핑백(황토색바지) 010)6799-****",
-          GET_POSITION: "신명운수",
-          ID: 15955111,
-          IMAGE_URL: "",
-          TAKE_PLACE: "회사내 분실센터",
-        }]
-        this.$emit('getItems', data)
-        // alert('문제가 발생했습니다.')
+        this.$emit('pending', false);
+        alert('문제가 발생했습니다.');
       })
-    }
+    },
+    lowerDatePickerVisible: function() {
+      this.upperDateVisible = false;
+      this.lowerDateVisible = true;
+    },
+    upperDatePickerVisible: function() {
+      this.upperDateVisible = true;
+      this.lowerDateVisible = false;
+    },
   }
 };
 </script>
