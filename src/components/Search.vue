@@ -112,7 +112,7 @@ export default {
           'en': 'Wallet',
           'img': 'cate_wallet',
         }, {
-          'name': '서류통부',
+          'name': '서류봉투',
           'en': 'Document',
           'img': 'cate_documents',
         }, {
